@@ -27,22 +27,15 @@ class ZohooController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-       // dd($input);
         $client_id = env('ZOHO_CLIENT_ID');
         $client_secret = env('ZOHO_CLIENT_SECRET');
         $base_acc_url = 'https://accounts.zoho.com';
 
 
         // Get ZohoCRM Token
-       // $tokenUrl = 'https://accounts.zoho.com.eu/oauth/v2/token?code=' . $input["code"] . '&client_id=' . $client_id . '&client_secret=' . $client_secret . '&redirect_uri=' .env('ZOHO_REDIRECT_URI'). '&grant_type=authorization_code';
         $token_url = $base_acc_url . '/oauth/v2/token?grant_type=authorization_code&client_id='. $client_id . '&client_secret='. $client_secret . '&redirect_uri='.env('ZOHO_REDIRECT_URI').'&code=' . $input["code"];
         $access_token_oblect = generate_access_token($token_url);
-        //dd($access_token_oblect);
         $access_token = $access_token_oblect->access_token;
-
-        //dd($access_token->access_token);
-        //$test='1000.e9e34b66377d8e3e864266d4a255af1a.c4935852e476950ee3e6e91f11c1036d';
-
         $service_url = 'https://www.zohoapis.com/crm/v2/Deals';
         $data =  [
             'data' => [
@@ -76,7 +69,7 @@ class ZohooController extends Controller
         $dealResponce_array = json_decode($result, true);
         $code = $dealResponce_array['data'][0]['code'];
         $info = $dealResponce_array['data'][0]['details'];
-        //dd($code);
+        
         if(isset($code) && ($code == "SUCCESS")){
             \Session::put('success','Deal created in ZohoCRM successfully.!');
             \Session::put('info', $info);
