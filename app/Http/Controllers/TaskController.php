@@ -11,10 +11,6 @@ class TaskController extends Controller
         //add related task
         $arr=\Session::get('info');
         $access_token = \Session::get('token');
-        //var_dump($arr);
-        //var_dump($arr['id']);
-
-       // dd();
 
         $service_url = 'https://www.zohoapis.com/crm/v2/Tasks';
         $data =  [
@@ -41,7 +37,6 @@ class TaskController extends Controller
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         $result = curl_exec($ch);
         curl_close($ch);
-        //var_dump($result);
         $taskResponce_array = json_decode($result, true);
         $code = $taskResponce_array['data'][0]['code'];
 
